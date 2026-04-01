@@ -47,6 +47,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
+    
 
     "module": "nodenext",
     "moduleResolution": "nodenext",
@@ -65,5 +66,7 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "esModuleInterop": true
-  }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

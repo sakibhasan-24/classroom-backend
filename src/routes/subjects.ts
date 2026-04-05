@@ -1,6 +1,6 @@
 import { ilike, or } from "drizzle-orm";
 import exrpress from "express"
-import { subjects } from "../db/schema";
+import { departments, subjects } from "../db/schema";
 
 const router =exrpress.Router( )
 
@@ -25,6 +25,13 @@ router.get("/",(req,res)=>{
                 ))
             )
         }
+
+        // if department exists
+        if(department){
+            filterResult.push(ilike(departments.name,`%${department}%`))
+        }
+
+        
     } catch (error) {
         console.log(`Subjects not found ${error}`)
         return res.json({

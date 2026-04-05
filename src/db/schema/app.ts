@@ -5,7 +5,7 @@ const timestap={
     createdAt:timestamp("createdAt").defaultNow().notNull(),
     updatedAt:timestamp("updatedAt").$onUpdate(()=>new Date()).notNull()
 }
-export const department=pgTable("department",{
+export const departments=pgTable("departments",{
     id:integer("id").primaryKey().generatedAlwaysAsIdentity(),
     code:varchar("code",{length:50}).notNull().unique(),
     name:varchar("name",{length:250}).notNull(),
@@ -18,7 +18,7 @@ export const department=pgTable("department",{
 
 export const subjects=pgTable("subjects",{
     id:integer("id").primaryKey().generatedAlwaysAsIdentity(),
-    departmentId:integer("departmentId").notNull().references(()=>department.id,{
+    departmentId:integer("departmentId").notNull().references(()=>departments.id,{
         onDelete:"restrict"
     }),
     code:varchar("code",{length:50}).notNull().unique(),
@@ -27,20 +27,20 @@ export const subjects=pgTable("subjects",{
     ...timestap
 })
 
-export const departmentRelations = relations(department, ({ many }) => ({
+export const departmentRelations = relations(departments, ({ many }) => ({
   subjects: many(subjects),
 }));
 
 export const subjectRelations = relations(subjects, ({ one,many }) => ({
-  department: one(department, {
+  department: one(departments, {
     fields: [subjects.departmentId],
-    references: [department.id],
+    references: [departments.id],
   }),
 }));
 
 
-export type Department=typeof department.$inferSelect
-export type newDepartMent=typeof department.$inferInsert
+export type Department=typeof departments.$inferSelect
+export type newDepartMent=typeof departments.$inferInsert
 
 export type Subject=typeof subjects.$inferSelect
 export type newSubject=typeof subjects.$inferInsert

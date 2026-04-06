@@ -1,14 +1,14 @@
-import { ilike, or } from "drizzle-orm";
+import { and, eq, ilike, or, sql } from "drizzle-orm";
 import exrpress from "express"
 import { departments, subjects } from "../db/schema";
-
+import {db} from "../db";
 const router =exrpress.Router( )
 
 
 // get query
 
 
-router.get("/",(req,res)=>{
+router.get("/",async (req,res)=>{
     try {
         const {search,department,page=1,limit=10}=req.query;
         // pagination logic
@@ -31,8 +31,17 @@ router.get("/",(req,res)=>{
             filterResult.push(ilike(departments.name,`%${department}%`))
         }
 
-        
-    } catch (error) {
+    // combine all filters using AND if any exists
+    const filter=filterResult.length>0?and(...filterResult):undefined
+    const count=await db.select({count:sql<number>`count(*)`})
+    .from(subjects).leftJoin(departments,eq(subjects.departmentId,departments.id))
+    .where(filter);
+
+    
+
+
+    }
+   catch (error) {
         console.log(`Subjects not found ${error}`)
         return res.json({
             message:"Subjects not found",

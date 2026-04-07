@@ -1,4 +1,4 @@
-import { and, eq, ilike, or, sql } from "drizzle-orm";
+import { and, desc, eq, getTableColumns, ilike, or, sql } from "drizzle-orm";
 import exrpress from "express"
 import { departments, subjects } from "../db/schema";
 import {db} from "../db";
@@ -36,6 +36,17 @@ router.get("/",async (req,res)=>{
     const count=await db.select({count:sql<number>`count(*)`})
     .from(subjects).leftJoin(departments,eq(subjects.departmentId,departments.id))
     .where(filter);
+
+    const totalCount=count[0]?.count ?? 0;
+    const subjectsList=await db.select({
+        ...getTableColumns(subjects),
+        department:{
+            ...getTableColumns(departments),
+        }
+    }).from(subjects).leftJoin(departments,eq(subjects.departmentId,departments.id))
+    .where(filter)
+    .orderBy(desc(subjects.createdAt))
+    .limit(limitPerPage).offset(offSet)
 
     
 

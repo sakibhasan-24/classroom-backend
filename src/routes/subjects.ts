@@ -57,7 +57,7 @@ router.get("/",async (req,res)=>{
         limit:limitPerPage,
         total:totalCount,
         totalPages:Math.ceil(totalCount/limitPerPage)
-        
+
        }
 
     })
@@ -74,3 +74,6 @@ router.get("/",async (req,res)=>{
         })
     }
 })
+
+
+export default router

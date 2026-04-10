@@ -1,8 +1,14 @@
-
+import 'dotenv';
 import express from 'express';
 import subjectRouter from './routes/subjects';
-
+import cors from 'cors';
 const app = express();
+
+app.use(cors({
+  origin:process.env.FRONTEND_URL,
+  methods:["GET","POST","PUT","DELETE"],
+  credentials:true,
+}));
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

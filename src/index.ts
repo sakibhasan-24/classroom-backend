@@ -4,6 +4,9 @@ import subjectRouter from './routes/subjects';
 import cors from 'cors';
 const app = express();
 
+if(process.env.FRONTEND_URL == undefined){
+  throw new Error("FRONTEND_URL is not defined");
+}
 app.use(cors({
   origin:process.env.FRONTEND_URL,
   methods:["GET","POST","PUT","DELETE"],
